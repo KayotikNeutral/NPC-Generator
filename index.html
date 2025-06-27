@@ -6,12 +6,22 @@
   <title>Fantasy NPC Generator</title>
   <style>
     body {
-      background: url('https://upload.wikimedia.org/wikipedia/commons/6/62/Old_paper_texture_%288%29.jpg') center/cover no-repeat;
+      background: radial-gradient(circle at center, #fdf6e3 30%, #e0d1b3 90%);
+      background-attachment: fixed;
       font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
       color: #3b2f1d;
       padding: 2em;
       text-align: center;
     }
+    #logo {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 3em;
+      font-weight: bold;
+      color: rgba(90, 45, 12, 0.75);
+      text-shadow: 2px 2px 5px #ccb88a;
+      margin-bottom: 0.5em;
+    }
+
     #generator {
       background-color: rgba(255, 248, 220, 0.9);
       padding: 2em;
@@ -49,6 +59,7 @@
   </style>
 </head>
 <body>
+  <div id="logo">Kayotik Neutral</div>
   <div id="generator">
     <h1>🧙‍♂️ Fantasy NPC Generator</h1>
 
@@ -144,6 +155,7 @@
         <div class='npc-detail'><strong>Secret:</strong> ${secret}</div>
         <div class='npc-detail'><strong>Motive:</strong> ${motive}</div>
         <div class='npc-detail'><strong>Voice:</strong> ${voice}</div>
+        <div class='npc-detail'><strong>Backstory:</strong> ${generateBackstory(name, race, gender, occupation, appearance, quirk, secret, motive, voice)}</div>
       `;
     }
 
@@ -152,10 +164,18 @@
     }
 
     function capitalize(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
-    window.onload = generateNPC;
+function generateBackstory(name, race, gender, occupation, appearance, quirk, secret, motive, voice) {
+  const pronoun = gender === 'female' ? 'She' : 'He';
+  const possessive = gender === 'female' ? 'her' : 'his';
+  return `${name} is a ${race.toLowerCase()} ${occupation.toLowerCase()} known throughout the land. ${pronoun} ${appearance.toLowerCase()}, a feature that makes ${possessive} stand out in any crowd. Though ${pronoun.toLowerCase()} serves as a ${occupation.toLowerCase()}, there's more than meets the eye. ${pronoun} ${secret.toLowerCase()}, a truth hidden behind ${possessive} ${voice.toLowerCase()} voice. Others often notice that ${pronoun.toLowerCase()} ${quirk.toLowerCase()}, which makes every interaction... memorable. ${pronoun} moves with purpose, driven by a deeper goal: ${motive.toLowerCase()}. In hushed tones, taverns speak of this ${race.toLowerCase()}, some in awe, others in fear. Many have tried to uncover the truth about ${name}, but none have returned with the same tale. ${pronoun} lives at the edge of legend and reality, walking the line with quiet intensity. And wherever ${pronoun.toLowerCase()} goes, stories are sure to follow.`;
+}
+
+    window.onload = () => {
+  generateNPC();
+};
   </script>
 </body>
 </html>
