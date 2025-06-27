@@ -6,7 +6,7 @@
   <title>Fantasy NPC Generator</title>
   <style>
     body {
-      background: url('https://i.imgur.com/GVUu0Hv.jpg') center/cover no-repeat;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/6/62/Old_paper_texture_%288%29.jpg') center/cover no-repeat;
       font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
       color: #3b2f1d;
       padding: 2em;
@@ -15,7 +15,7 @@
     #generator {
       background-color: rgba(255, 248, 220, 0.9);
       padding: 2em;
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
       border: 8px solid #8b5e3c;
       border-radius: 10px;
@@ -42,34 +42,101 @@
     button:hover {
       background-color: #a96e4c;
     }
+    select, label {
+      font-size: 1em;
+      margin: 0.5em;
+    }
   </style>
 </head>
 <body>
   <div id="generator">
-    <h1>🧙‍♂️ Random NPC Generator</h1>
+    <h1>🧙‍♂️ Fantasy NPC Generator</h1>
+
+    <label for="gender">Gender:</label>
+    <select id="gender">
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+    </select>
+
+    <label for="race">Race:</label>
+    <select id="race">
+      <option value="Human">Human</option>
+      <option value="Elf">Elf</option>
+      <option value="Dwarf">Dwarf</option>
+      <option value="Halfling">Halfling</option>
+      <option value="Tiefling">Tiefling</option>
+      <option value="Dragonborn">Dragonborn</option>
+      <option value="Half-Orc">Half-Orc</option>
+      <option value="Gnome">Gnome</option>
+    </select>
+
     <div id="npc"></div>
     <button onclick="generateNPC()">Generate NPC</button>
   </div>
 
   <script>
-    const names = ["Sam/Samantha", "Joe/Jolene", "Alex/Alexia", "Ben/Bella", "Kai/Kaia", "Leo/Leona", "Max/Maxine", "Theo/Thea", "Ash/Ashlyn", "Finn/Fiona"];
+    const names = {
+      male: {
+        Human: ["Thomas", "Garrick", "Liam"],
+        Elf: ["Kael", "Theron", "Sylas"],
+        Dwarf: ["Borin", "Thrain", "Durik"],
+        Halfling: ["Milo", "Tobias", "Finn"],
+        Tiefling: ["Azar", "Kaelen", "Riven"],
+        Dragonborn: ["Rhogar", "Torrin", "Balasar"],
+        "Half-Orc": ["Grom", "Thok", "Darak"],
+        Gnome: ["Fizzwick", "Nim", "Boddynock"]
+      },
+      female: {
+        Human: ["Eliza", "Marian", "Talia"],
+        Elf: ["Lirael", "Anwen", "Syllia"],
+        Dwarf: ["Brunna", "Helga", "Ragna"],
+        Halfling: ["Poppy", "Nissa", "Seraphina"],
+        Tiefling: ["Zara", "Lyra", "Vex"],
+        Dragonborn: ["Akra", "Sora", "Kava"],
+        "Half-Orc": ["Ugra", "Shura", "Mazga"],
+        Gnome: ["Trixie", "Zanna", "Bibble"]
+      }
+    };
+
     const occupations = ["Alchemist", "Innkeeper", "Wandering Bard", "Haunted Priest", "Traveling Merchant", "Cursed Knight", "Goblin Diplomat", "Clockwork Tinkerer", "Blind Seer", "Outcast Druid"];
-    const appearances = ["Wears patchy robes and has glowing green eyes", "Covered in soot with a cracked monocle", "Always seen with a black raven on their shoulder", "Scarred face and mechanical hand", "Covered in tattoos that seem to move", "Dresses in mismatched noblewear", "Cloak stitched from hundreds of feathers", "Eyes shine like molten gold", "Wears a wooden mask that never comes off", "Hair made of writhing vines"];
+
+    const racialTraits = {
+      Human: ["Wears well-worn boots and a determined gaze"],
+      Elf: ["Has luminous eyes and long, silver hair"],
+      Dwarf: ["Wears a braided beard and iron-studded leathers"],
+      Halfling: ["Carries a pie and has dirt-smudged cheeks"],
+      Tiefling: ["Has curling horns and ember-glow eyes"],
+      Dragonborn: ["Scales shimmer in the torchlight"],
+      "Half-Orc": ["Tusks peek from under a hooded cloak"],
+      Gnome: ["Has wild hair and soot-stained gloves"]
+    };
+
     const quirks = ["Talks to themselves", "Collects teeth", "Never blinks", "Hums old war songs", "Always lies", "Speaks in rhyme", "Only speaks in questions", "Has a pet mushroom", "Refuses to touch metal", "Obsessed with stars"];
+
     const secrets = ["Is spying for someone", "Knows a hidden entrance", "Stole something sacred", "Has a bounty on their head", "Knows the villain’s true name", "Is cursed to change form", "Has seen the artifact", "Knows how to open the portal", "Made a deal with a demon", "Isn’t what they seem"];
+
     const motives = ["Wants to escape their past", "Protects a hidden relic", "Seeks revenge for a lost sibling", "Wants to restore a ruined temple", "Dreams of becoming immortal", "Wants to raise a fallen god", "Wishes to break a family curse", "Seeks a lost love", "Aims to write the perfect song", "Is searching for a legendary blade"];
-    const voices = ["Gravelly and slow", "Fast with a high-pitched laugh", "Deep and melodic", "Monotone and eerie", "Cracks frequently mid-sentence", "Soothing and rhythmic", "Booming with dramatic flair", "Soft and whispery", "Thick regional accent", "Changes pitch constantly"];
+
+    const voices = {
+      male: ["Deep and gravelly", "Booming with dramatic flair", "Monotone and eerie", "Gruff but kind", "Fast and sarcastic"],
+      female: ["Soft and whispery", "Soothing and rhythmic", "Piercing and precise", "Warm and maternal", "Fast with a high-pitched laugh"]
+    };
 
     function generateNPC() {
-      const name = pick(names);
+      const gender = document.getElementById("gender").value;
+      const race = document.getElementById("race").value;
+
+      const name = pick(names[gender][race]);
       const occupation = pick(occupations);
-      const appearance = pick(appearances);
+      const appearance = pick(racialTraits[race]);
       const quirk = pick(quirks);
       const secret = pick(secrets);
       const motive = pick(motives);
-      const voice = pick(voices);
+      const voice = pick(voices[gender]);
 
       document.getElementById("npc").innerHTML = `
+        <div class='npc-detail'><strong>Race:</strong> ${race}</div>
+        <div class='npc-detail'><strong>Gender:</strong> ${capitalize(gender)}</div>
         <div class='npc-detail'><strong>Name:</strong> ${name}</div>
         <div class='npc-detail'><strong>Occupation:</strong> ${occupation}</div>
         <div class='npc-detail'><strong>Appearance:</strong> ${appearance}</div>
@@ -82,6 +149,10 @@
 
     function pick(list) {
       return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
     window.onload = generateNPC;
